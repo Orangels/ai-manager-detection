@@ -15,16 +15,16 @@
                             <div class="anno-l-content">
 <!--                                <div class="title">标注对象</div>-->
                                 <div class="select-all-rect">
-                                    <div class="label-opt-left">
-                                        <el-select placeholder="创建的图形类别" multiple collapse-tags
-                                                   v-model="labelCreated.value" @change="labelChange"
-                                        >
+<!--                                    <div class="label-opt-left">-->
+<!--                                        <el-select placeholder="创建的图形类别" multiple collapse-tags-->
+<!--                                                   v-model="labelCreated.value" @change="labelChange"-->
+<!--                                        >-->
 
-                                            <el-option v-for="(option, i) in labelCreated.option" :key="i"
-                                                       :label="option.label" :value="option.value"
-                                            ></el-option>
-                                        </el-select>
-                                    </div>
+<!--                                            <el-option v-for="(option, i) in labelCreated.option" :key="i"-->
+<!--                                                       :label="option.label" :value="option.value"-->
+<!--                                            ></el-option>-->
+<!--                                        </el-select>-->
+<!--                                    </div>-->
                                     <el-button class="btn btn1 @light-colour" size="medium" @click='allSelect'>{{checked ? '全选':'取消全选'}}</el-button>
                                 </div>
                                 <div class="content-per" :class="{'active':item.id==active}"
@@ -64,7 +64,7 @@
                             </div>
 
                             <div class="op-btn1">
-                                <div class="txt">{{'当前页数/已标注/总数'}}</div>
+                                <div class="txt">{{'当前页数 / 已标注 / 总数'}}</div>
                                 <div class="txt">{{wholeVar.currentIndex + '/' + wholeVar.finished + '/' + wholeVar.total}}</div>
                                 <el-progress :show-text="false" :stroke-width="14" :percentage="wholeVar.percentage"></el-progress>
                             </div>
@@ -167,6 +167,7 @@
                                 :position="options.position"
                                 @canvasmouseup="$mouseup" @canvasmousedown="$mousedown" 
                                 @changeIsDragging="isDraggingChange" @canvascontextmenu="$contextmenu"
+                                @labelChange="labelChange"
                             >
                                 <img id="canvas_img_id" :width="currentImgData.props.domWidth" :src="'//'+currentImgData.props.src" />
                             </canvas-rect>
@@ -186,7 +187,7 @@ export default {
     data() {
         return {
             fullscreenLoading:false,
-            checked:true,
+            checked:false,
             options: {
                 layers: [],
                 color: "#0000ff",
@@ -465,6 +466,8 @@ export default {
             let drawType = this.$refs.canvasPanel.canvasRectObj.drawType;
             if(drawType === "polar") return; // 如果当前是 极点模式那么禁止直行其他操作，等待矩形绘制完成
 
+            console.log('点击')
+
             if (this.isDragging) {
                 // 如果是拖拽，那么更新临时layers；
                 // 对比 当前显示的框 中 数据发生改变的 框id；替换相应的框位置数据
@@ -622,6 +625,14 @@ export default {
         },
         // 下拉labelOption change
         labelChange(e) {
+            // console.log(e)
+            // console.log(this.labelCreated)
+            // let optionTmp = this.labelCreated.option.filter((option, index)=>{
+            //     return e.indexOf(option.value)
+            // })
+
+            this.checked = true
+
             let layers = [];
             for (let i = 0; i < this.layersTemp.length; i++) {
                 if (e.indexOf(this.layersTemp[i].labelOpt.idx) >= 0) {
@@ -631,6 +642,7 @@ export default {
             let _this = this;
             async function fn() {
                 await _this.$refs.canvasPanel.clearCanvas();
+                // await _this.$set(_this.labelCreated, "option", JSON.parse(JSON.stringify(optionTmp)))
                 await _this.$set(_this.options, "layers", JSON.parse(JSON.stringify(layers)));
                 await _this.$refs.canvasPanel.reshowCanvas();
             }

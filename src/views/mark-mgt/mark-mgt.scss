@@ -39,13 +39,15 @@
                         overflow-y: auto;
                         .select-all-rect{
                             display: flex;
-                            justify-content: space-around;
+                            flex-direction: row-reverse;
+                            //justify-content: space-around;
                             margin: 20px 0;
                         }
                         .btn {
                             color: #fff;
                             background: #323232;
                             border: 1px solid #535353;
+                            margin-right: 20px;
                             &:hover {
                                 border: 1px solid #535353;
                                 background: #535353;

@@ -58,6 +58,7 @@ class rectAngle {
         this.startx = e.offsetX;
         this.starty = e.offsetY;
         this.currentR = this.isPointInRetc(this.startx, this.starty);
+        console.log(this.currentR)
         if (this.currentR) {
             this.leftDistance = this.startx - this.currentR.x1;
             this.topDistance = this.starty - this.currentR.y1;
@@ -266,25 +267,25 @@ class rectAngle {
             }
 
             // 如果（鼠标当前坐标在当前矩形框内 && 是调整状态） 变成拖动
-            if (this.ctx.isPointInPath(x, y) && this.dragging) {
-                if(item.drawType === 'rect'){ // 只有矩形框才可以拖
-                    // 只有鼠标当前位置只有一个框的时候才可以拖拽
-                    // let rectInLayer = [];
-                    // this.layers.forEach((item, index)=>{
-                    //     let x_in = x >= item.x1 && x <= item.x2;
-                    //     let y_in = y >= item.y1 && y <= item.y2;
-                    //     if(x_in && y_in){
-                    //         rectInLayer.push(item);
-                    //     }
-                    // })
-                    // if(rectInLayer.length == 1){
-                        this.render(item); // 鼠标当前所在坐标 只有一个框 时候 才可以拖拽
-                    // }
-                }
-                allNotIn = 0;
-                this.ctx.fillStyle = "rgba(84,153,224,0.7)";
-                this.ctx.fill();
-            }
+            // if (this.ctx.isPointInPath(x, y) && this.dragging) {
+            //     if(item.drawType === 'rect'){ // 只有矩形框才可以拖
+            //         // 只有鼠标当前位置只有一个框的时候才可以拖拽
+            //         // let rectInLayer = [];
+            //         // this.layers.forEach((item, index)=>{
+            //         //     let x_in = x >= item.x1 && x <= item.x2;
+            //         //     let y_in = y >= item.y1 && y <= item.y2;
+            //         //     if(x_in && y_in){
+            //         //         rectInLayer.push(item);
+            //         //     }
+            //         // })
+            //         // if(rectInLayer.length == 1){
+            //             this.render(item); // 鼠标当前所在坐标 只有一个框 时候 才可以拖拽
+            //         // }
+            //     }
+            //     allNotIn = 0;
+            //     this.ctx.fillStyle = "rgba(84,153,224,0.7)";
+            //     this.ctx.fill();
+            // }
             this.ctx.stroke();
             this.drawArc(item)
         
