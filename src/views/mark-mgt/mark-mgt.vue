@@ -65,7 +65,7 @@
 
                             <div class="op-btn1">
                                 <div class="txt">{{'当前页数 / 已标注 / 总数'}}</div>
-                                <div class="txt">{{wholeVar.currentIndex + '/' + wholeVar.finished + '/' + wholeVar.total}}</div>
+                                <div class="txt">{{wholeVar.currentIndex + ' / ' + wholeVar.finished + ' / ' + wholeVar.total}}</div>
                                 <el-progress :show-text="false" :stroke-width="14" :percentage="wholeVar.percentage"></el-progress>
                             </div>
                             <div  class="op-btn2">
