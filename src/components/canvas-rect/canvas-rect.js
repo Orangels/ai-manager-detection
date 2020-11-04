@@ -57,7 +57,9 @@ class rectAngle {
         // console.log('mousedown')
         this.startx = e.offsetX;
         this.starty = e.offsetY;
+
         this.currentR = this.isPointInRetc(this.startx, this.starty);
+
         console.log(this.currentR)
         if (this.currentR) {
             this.leftDistance = this.startx - this.currentR.x1;
@@ -67,6 +69,9 @@ class rectAngle {
         this.ctx.strokeStyle = this.lineColor;
         this.ctx.lineWidth = 2;
         this.flag = 1;
+        if (!this.dragging){
+            this.currentR = []
+        }
     }
     mousemove = (e) => {
         // if(!this.dragging)console.log('mousemove')

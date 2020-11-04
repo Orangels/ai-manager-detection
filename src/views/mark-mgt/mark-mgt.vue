@@ -100,7 +100,7 @@
                                     <span class="key-per-r">Ctrl + Z</span>
                                 </div> -->
                                 <div class="key-per">
-                                    <span class="key-per-l">复位</span>
+                                    <span class="key-per-l">清空</span>
                                     <span class="key-per-r">Ctrl + F</span>
                                 </div>
                                 <div class="key-per">
