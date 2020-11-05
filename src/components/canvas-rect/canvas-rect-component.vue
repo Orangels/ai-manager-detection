@@ -131,17 +131,16 @@ export default {
                 this.canvasRectObj.mousedown_polar(e);
             }
             this.$emit("canvasmousedown", e);
-            if (this.canvasRectObj.currentR){
-                let layerArr = this.canvasRectObj.layers.filter((value, index)=>{
-                    return value.labelOpt.idx != this.canvasRectObj.currentR.labelOpt.idx
-                });
-                let idxArr = layerArr.map((value, index)=>{
-                    return value.labelOpt.idx
-                })
-                console.log(idxArr)
-                this.$emit("labelChange", idxArr)
-            }
-
+            // if (e.ctrlKey && this.canvasRectObj.currentR){
+            //     let layerArr = this.canvasRectObj.layers.filter((value, index)=>{
+            //         return value.labelOpt.idx != this.canvasRectObj.currentR.labelOpt.idx
+            //     });
+            //     let idxArr = layerArr.map((value, index)=>{
+            //         return value.labelOpt.idx
+            //     })
+            //     console.log(idxArr)
+            //     this.$emit("labelChange", idxArr)
+            // }
         },
         canvasMouseMove(e) {
             if (this.drawType === "rect") {

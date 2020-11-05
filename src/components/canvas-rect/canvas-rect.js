@@ -25,6 +25,7 @@ import { Message } from 'element-ui';
  */
 class rectAngle {
     constructor() {
+        this.calibration = 10
         this.c = null;
         this.ctx = null;
         this.startx = 0;//起始x坐标
@@ -58,7 +59,8 @@ class rectAngle {
         this.startx = e.offsetX;
         this.starty = e.offsetY;
 
-        this.currentR = this.isPointInRetc(this.startx, this.starty);
+        // this.currentR = this.isPointInRetc(this.startx, this.starty);
+        this.currentR = this.isPointInArc(this.startx, this.starty)
 
         console.log(this.currentR)
         if (this.currentR) {
@@ -187,7 +189,7 @@ class rectAngle {
         this.ctx.fillStyle = this.lineColor;
         for (let i = 0; i < podata.length; i++) {
             this.ctx.beginPath();
-            this.ctx.arc(podata[i].x, podata[i].y, 5, Math.PI*2,0);
+            this.ctx.arc(podata[i].x, podata[i].y, this.calibration, Math.PI*2,0);
             this.ctx.fill();
             this.ctx.closePath();
         }
@@ -253,21 +255,21 @@ class rectAngle {
             this.ctx.rect(item.x1, item.y1, item.width, item.height);
             this.ctx.strokeStyle = item.strokeStyle;
 
-            if (x >= (item.x1 - 10) && x <= (item.x1 + 10) && y <= (item.y2 - 10) && y >= (item.y1 + 10)) {
+            if (x >= (item.x1 - this.calibration) && x <= (item.x1 + this.calibration) && y <= (item.y2 - this.calibration) && y >= (item.y1 + this.calibration)) {
                 // this.resizeLeft(item);
-            } else if (x >= (item.x2 - 10) && x <= (item.x2 + 10) && y <= (item.y2 - 10) && y >= (item.y1 + 10)) {
+            } else if (x >= (item.x2 - this.calibration) && x <= (item.x2 + this.calibration) && y <= (item.y2 - this.calibration) && y >= (item.y1 + this.calibration)) {
                 // this.resizeWidth(item);
-            } else if (y >= (item.y1 - 10) && y <= (item.y1 + 10) && x <= (item.x2 - 10) && x >= (item.x1 + 10)) {
+            } else if (y >= (item.y1 - this.calibration) && y <= (item.y1 + this.calibration) && x <= (item.x2 - this.calibration) && x >= (item.x1 + this.calibration)) {
                 // this.resizeTop(item);
-            } else if (y >= (item.y2 - 10) && y <= (item.y2 + 10) && x <= (item.x2 - 10) && x >= (item.x1 + 10)) {
+            } else if (y >= (item.y2 - this.calibration) && y <= (item.y2 + this.calibration) && x <= (item.x2 - this.calibration) && x >= (item.x1 + this.calibration)) {
                 // this.resizeHeight(item);
-            } else if (x >= (item.x1 - 10) && x <= (item.x1 + 10) && y <= (item.y1 + 10) && y >= (item.y1 - 10)) {
+            } else if (x >= (item.x1 - this.calibration) && x <= (item.x1 + this.calibration) && y <= (item.y1 + this.calibration) && y >= (item.y1 - this.calibration)) {
                 if (this.dragging && item.drawType !== 'polar') this.resizeLT(item);
-            } else if (x >= (item.x2 - 10) && x <= (item.x2 + 10) && y <= (item.y2 + 10) && y >= (item.y2 - 10)) {
+            } else if (x >= (item.x2 - this.calibration) && x <= (item.x2 + this.calibration) && y <= (item.y2 + this.calibration) && y >= (item.y2 - this.calibration)) {
                 if (this.dragging && item.drawType !== 'polar') this.resizeWH(item);
-            } else if (x >= (item.x1 - 10) && x <= (item.x1 + 10) && y <= (item.y2 + 10) && y >= (item.y2 - 10)) {
+            } else if (x >= (item.x1 - this.calibration) && x <= (item.x1 + this.calibration) && y <= (item.y2 + this.calibration) && y >= (item.y2 - this.calibration)) {
                 if (this.dragging && item.drawType !== 'polar') this.resizeLH(item);
-            } else if (x >= (item.x2 - 10) && x <= (item.x2 + 10) && y <= (item.y1 + 10) && y >= (item.y1 - 10)) {
+            } else if (x >= (item.x2 - this.calibration) && x <= (item.x2 + this.calibration) && y <= (item.y1 + this.calibration) && y >= (item.y1 - this.calibration)) {
                 if (this.dragging && item.drawType !== 'polar') this.resizeWT(item);
             }
 
@@ -295,6 +297,9 @@ class rectAngle {
             this.drawArc(item)
         
         })
+
+        // allNotIn = 0;
+
         // （按下了鼠标 && 可操作状态 && 变成拖动）
         if (this.flag && this.operate < 3 && allNotIn) {
             this.operate = 1
@@ -345,8 +350,10 @@ class rectAngle {
         let layers_reverse = [...this.layers].reverse();
         let len = layers_reverse.length;
         // let len = this.layers.length;
+
         for (let i = 0; i < len; i++) {
             if (layers_reverse[i].x1 < x && x < layers_reverse[i].x2 && layers_reverse[i].y1 < y && y < layers_reverse[i].y2) {
+            // if ((layers_reverse[i].x1 + this.calibration) < x && x < (layers_reverse[i].x2 - this.calibration) && (layers_reverse[i].y1 + this.calibration) < y && y < (layers_reverse[i].y2 - this.calibration)) {
                 return layers_reverse[i];
             }
             // if (this.layers[i].x1 < x && x < this.layers[i].x2 && this.layers[i].y1 < y && y < this.layers[i].y2) {
@@ -354,6 +361,37 @@ class rectAngle {
             // }
         }
     }
+
+    /** 判断当前点是否在 当前所有图形内 返回当前图形对象*/
+    isPointInArc(x, y) {
+        let layers_reverse = [...this.layers].reverse();
+        let len = layers_reverse.length;
+        // let len = this.layers.length;
+
+        for (let i = 0; i < len; i++) {
+            let item = layers_reverse[i]
+            if (x >= (item.x1 - this.calibration) && x <= (item.x1 + this.calibration) && y <= (item.y1 + this.calibration) && y >= (item.y1 - this.calibration)) {
+                if (this.dragging && item.drawType !== 'polar') return item;
+            } else if (x >= (item.x2 - this.calibration) && x <= (item.x2 + this.calibration) && y <= (item.y2 + this.calibration) && y >= (item.y2 - this.calibration)) {
+                if (this.dragging && item.drawType !== 'polar') return item;
+            } else if (x >= (item.x1 - this.calibration) && x <= (item.x1 + this.calibration) && y <= (item.y2 + this.calibration) && y >= (item.y2 - this.calibration)) {
+                if (this.dragging && item.drawType !== 'polar') return item;
+            } else if (x >= (item.x2 - this.calibration) && x <= (item.x2 + this.calibration) && y <= (item.y1 + this.calibration) && y >= (item.y1 - this.calibration)) {
+                if (this.dragging && item.drawType !== 'polar') return item;
+
+            }
+
+
+            // if (layers_reverse[i].x1 < x && x < layers_reverse[i].x2 && layers_reverse[i].y1 < y && y < layers_reverse[i].y2) {
+            //     // if ((layers_reverse[i].x1 + this.calibration) < x && x < (layers_reverse[i].x2 - this.calibration) && (layers_reverse[i].y1 + this.calibration) < y && y < (layers_reverse[i].y2 - this.calibration)) {
+            //     return layers_reverse[i];
+            // }
+            // if (this.layers[i].x1 < x && x < this.layers[i].x2 && this.layers[i].y1 < y && y < this.layers[i].y2) {
+            //     return this.layers[i];
+            // }
+        }
+    }
+
     fixPosition(position) {
         if (position.x1 > position.x2) {
             let x = position.x1;

@@ -15,16 +15,16 @@
                             <div class="anno-l-content">
 <!--                                <div class="title">标注对象</div>-->
                                 <div class="select-all-rect">
-<!--                                    <div class="label-opt-left">-->
-<!--                                        <el-select placeholder="创建的图形类别" multiple collapse-tags-->
-<!--                                                   v-model="labelCreated.value" @change="labelChange"-->
-<!--                                        >-->
+                                    <div class="label-opt-left">
+                                        <el-select placeholder="创建的图形类别" multiple collapse-tags
+                                                   v-model="labelCreated.value" @change="labelChange"
+                                        >
 
-<!--                                            <el-option v-for="(option, i) in labelCreated.option" :key="i"-->
-<!--                                                       :label="option.label" :value="option.value"-->
-<!--                                            ></el-option>-->
-<!--                                        </el-select>-->
-<!--                                    </div>-->
+                                            <el-option v-for="(option, i) in labelCreated.option" :key="i"
+                                                       :label="option.label" :value="option.value"
+                                            ></el-option>
+                                        </el-select>
+                                    </div>
                                     <el-button class="btn btn1 @light-colour" size="medium" @click='allSelect'>{{checked ? '全选':'取消全选'}}</el-button>
                                 </div>
                                 <div class="content-per" :class="{'active':item.id==active}"
@@ -110,6 +110,10 @@
                                 <div class="key-per">
                                     <span class="key-per-l">缩放</span>
                                     <span class="key-per-r">Ctrl + (-/+)</span>
+                                </div>
+                                <div class="key-per">
+                                    <span class="key-per-l">隐藏框</span>
+                                    <span class="key-per-r">Ctrl + 鼠标左键</span>
                                 </div>
                                 
                             </div>
@@ -460,7 +464,7 @@ export default {
             this.$set(this.options, "transform", 100);
         },
         $mousedown(e) {
-            // console.log(e)
+            console.log(e)
         },
         $mouseup(e) {
             let drawType = this.$refs.canvasPanel.canvasRectObj.drawType;
@@ -739,9 +743,12 @@ export default {
                     // 
                     this.initCanvasDom('init');
                     this.fullscreenLoading = true;
+                    // 重新渲染时 移除假盘监听事件
+                    window.removeEventListener('keydown', this.keydownEvent)
                     setTimeout(() => { this.echoDraw() }, 500);
                     setTimeout(() => {
                         this.fullscreenLoading = false;
+                        window.addEventListener('keydown', this.keydownEvent)
                     }, 700);
                 }else{
                     this.$message({ type: "warning", message: "照片数据查询失败!" });

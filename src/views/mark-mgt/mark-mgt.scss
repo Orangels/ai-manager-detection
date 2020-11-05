@@ -39,8 +39,8 @@
                         overflow-y: auto;
                         .select-all-rect{
                             display: flex;
-                            flex-direction: row-reverse;
-                            //justify-content: space-around;
+                            //flex-direction: row-reverse;
+                            justify-content: space-around;
                             margin: 20px 0;
                         }
                         .btn {
