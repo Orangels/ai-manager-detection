@@ -710,11 +710,13 @@ export default {
             this.$http.get(this.$api.markMgtData, param, true).then($res => {
                 if($res.data.code == 0){
                     let res = $res.data.data;
+                    console.log(res)
                     // console.log("数据：", res)
-                    if(!res.is_collection && (res.count === res.complete_num)) {
-                        this.$router.push({ path: "/task-center"});
-                        return;
-                    }
+                    // 不回跳
+                    // if(!res.is_collection && (res.count === res.complete_num)) {
+                    //     this.$router.push({ path: "/task-center"});
+                    //     return;
+                    // }
                     // 
                     this.wholeVar = {
                         total: res.count,
@@ -754,7 +756,7 @@ export default {
                     this.$message({ type: "warning", message: "照片数据查询失败!" });
                 }
             }).catch($res => {
-                this.$message({ type: "warning", message: "照片数据查询失败!" });
+                this.$message({ type: "error", message: "照片数据查询失败!" });
             });
         },
         // 回显
@@ -881,19 +883,47 @@ export default {
             // 是从收藏按钮跳转进来的（this.is_collection == true): 如果当前是取消收藏状态，那么下一次请求数据仍然请求当前页码；
             // 如果是非收藏按钮跳转进来的 ： 那么请求下一次数据页码加一
             if (flag === 'save') {
-                this.saveInfo((res)=> {
-                    // console.log(this.wholeVar)
-                    if(this.wholeVar.currentIndex > (this.wholeVar.finished + 1)) return;
-                    if(!(this.is_collection && !this.currentImgData.props.isCollection)){
-                        this.wholeVar.currentIndex += 1; // 请求下一页
-                        if(this.wholeVar.currentIndex > this.wholeVar.total){
-                            this.$router.push({ path: "/task-center"});
-                            return;
+                if (this.wholeVar.currentIndex >= this.wholeVar.total){
+
+                    this.$confirm(
+                        '<span class="el-message-box__tips">是否结束标注任务?</span>',
+                        "结束任务",
+                        {
+                            dangerouslyUseHTMLString: true,
+                            confirm: ()=>{
+                                this.saveInfo((res)=> {
+                                    // console.log(this.wholeVar)
+                                    if(this.wholeVar.currentIndex > (this.wholeVar.finished + 1)) return;
+                                    if(!(this.is_collection && !this.currentImgData.props.isCollection)){
+                                        this.wholeVar.currentIndex += 1; // 请求下一页
+                                        if(this.wholeVar.currentIndex > this.wholeVar.total){
+                                            this.$router.push({ path: "/task-center"});
+                                            return;
+                                        }
+                                    }
+                                    this.clearCanvas();
+                                    this.getImgList();
+                                });
+                            },
+                            confirmButtonText: "确定",
+                            cancelButtonText: "取消"
                         }
-                    }
-                    this.clearCanvas();
-                    this.getImgList();
-                });
+                    );
+                }else {
+                    this.saveInfo((res)=> {
+                        // console.log(this.wholeVar)
+                        if(this.wholeVar.currentIndex > (this.wholeVar.finished + 1)) return;
+                        if(!(this.is_collection && !this.currentImgData.props.isCollection)){
+                            this.wholeVar.currentIndex += 1; // 请求下一页
+                            if(this.wholeVar.currentIndex > this.wholeVar.total){
+                                this.$router.push({ path: "/task-center"});
+                                return;
+                            }
+                        }
+                        this.clearCanvas();
+                        this.getImgList();
+                    });
+                }
             } else {
                 if(this.wholeVar.currentIndex > this.wholeVar.finished) return;
                 if(!(this.is_collection && !this.currentImgData.props.isCollection)){

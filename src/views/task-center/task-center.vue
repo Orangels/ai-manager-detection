@@ -43,8 +43,11 @@
                         </el-table-column>
                         <el-table-column  label="操作">
                             <template slot-scope="scope">
-                                <el-button v-if='scope.row.personal_mession_status === "marking"' 
-                                    @click="handleClick(scope.row, 'operation')" type="text" size="small"
+<!--                                <el-button v-if='scope.row.personal_mession_status === "marking"' -->
+<!--                                    @click="handleClick(scope.row, 'operation')" type="text" size="small"-->
+<!--                                >开始标注</el-button>-->
+                                <el-button
+                                           @click="handleClick(scope.row, 'operation')" type="text" size="small"
                                 >开始标注</el-button>
                             </template>
                         </el-table-column>
