@@ -141,6 +141,16 @@
                                 </span>
                             </div>
                             <span class="line1"></span>
+                            <div class="label-opt-jumpImg">
+                                <el-select placeholder="跳转页"
+                                           v-model="wholeVar.currentIndex" @change="jumpImgChange"
+                                >
+
+                                    <el-option v-for="i in wholeVar.finished" :key="i"
+                                               :label=i :value=i
+                                    ></el-option>
+                                </el-select>
+                            </div>
                             <el-button class="btn btn1 @light-colour" size="medium" @click="clearCanvas">
                                 <i class="vic-icon @base-reset"></i>清空
                             </el-button>
@@ -151,13 +161,13 @@
                             <!-- <el-button class="btn @light-colour" size="medium" @click="changeTheme">
                                 <i class="vic-icon @left-set_solid"></i>换肤
                             </el-button> -->
-                            <!-- <span class="line1"></span> -->
+<!--                             <span class="line1"></span>-->
 <!--                            <el-button class="btn btn1 @light-colour" size="medium" @click='allSelect'>{{checked ? '全选':'取消全选'}}</el-button>-->
 <!--                            <div class="label-opt">-->
-<!--                                <el-select placeholder="创建的图形类别" multiple collapse-tags -->
+<!--                                <el-select placeholder="创建的图形类别" multiple collapse-tags-->
 <!--                                    v-model="labelCreated.value" @change="labelChange"-->
 <!--                                >-->
-<!--                                   -->
+
 <!--                                    <el-option v-for="(option, i) in labelCreated.option" :key="i"-->
 <!--                                        :label="option.label" :value="option.value"-->
 <!--                                    ></el-option>-->
@@ -284,6 +294,10 @@ export default {
         }
     },
     methods: {
+        onSubmit_selectPic(){
+            console.log('submit')
+        },
+
         allSelect(){
             let layers = [];
             if(this.checked){
@@ -627,6 +641,14 @@ export default {
             this.$set(this.labelCreated, "option", JSON.parse(JSON.stringify(opt)));
             this.$set(this.options, "layers", JSON.parse(JSON.stringify(layers)));
         },
+        //下拉 跳转 img
+        jumpImgChange(e){
+            // this.wholeVar.currentIndex = parseInt(e); // 请求下一页
+
+            this.clearCanvas();
+            this.getImgList();
+        },
+
         // 下拉labelOption change
         labelChange(e) {
             // console.log(e)
