@@ -452,6 +452,7 @@ export default {
         },
         // 开始画
         drawRectangle(item) {
+            // console.log(item)
             this.active = item.id;
             this.$set(this.options, "color", item.color);
             let type = item.type === "bndbox" ? "rect" : "polar";
@@ -474,6 +475,8 @@ export default {
             // 清空下拉选择内容
             this.labelCreated.value  = [];
             this.labelCreated.option = [];
+            // 添加测试 清空 bug
+            this.options.layers = [];
             // 
             this.$set(this.options, "transform", 100);
         },
@@ -494,6 +497,8 @@ export default {
                 //判断是否是画框
                 let newVal = this.$refs.canvasPanel.canvasRectObj.layers;
                 let optLayers = this.options.layers;
+                console.log(newVal)
+                console.log(optLayers)
                 if(newVal.length !== optLayers.length) {
                     // 如果新建，那么添加新的layer
                     this.addLabelCreated();
@@ -600,6 +605,9 @@ export default {
         addLabelCreated() {
             let newVal = this.$refs.canvasPanel.canvasRectObj.layers;
             newVal = JSON.parse(JSON.stringify(newVal));
+            console.log(newVal)
+            console.log(this.labeList)
+            console.log(this.active)
             if (newVal.length) {
                 this.labeList.forEach((item, index) => {
                     if (this.active == item.id) {
@@ -851,6 +859,7 @@ export default {
             this.layersTemp = JSON.parse(JSON.stringify(layers));
 
             this.$set(this.options, "layers", JSON.parse(JSON.stringify(layers)));
+            console.log(this.options.layers)
             setTimeout(() => {
                 this.$refs.canvasPanel.echoRectangle();
                 this.updateLabelOpts();
@@ -963,6 +972,7 @@ export default {
         },
         // 保存
         saveInfo(callback) {
+            console.log(this.layersTemp)
             let tempLayers  = JSON.parse(JSON.stringify(this.layersTemp));
             let tempTagList = JSON.parse(JSON.stringify(this.tagList));
             // 标注信息
@@ -1047,6 +1057,11 @@ export default {
 				mark_info:  mark_info,
 				pic_info:   pic_info
             };
+
+            console.log(`********1052*********`)
+            console.log(param)
+            console.log(`********1054*********`)
+
             this.$http.post(this.$api.markMgtData, param, true).then($res => {
                 let res = $res.data;
                 if (res.code == 0) {

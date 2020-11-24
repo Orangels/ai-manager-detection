@@ -131,6 +131,7 @@ export default {
                 this.canvasRectObj.mousedown_polar(e);
             }
             this.$emit("canvasmousedown", e);
+            // ctrl + 左键 隐藏
             // if (e.ctrlKey && this.canvasRectObj.currentR){
             //     let layerArr = this.canvasRectObj.layers.filter((value, index)=>{
             //         return value.labelOpt.idx != this.canvasRectObj.currentR.labelOpt.idx
